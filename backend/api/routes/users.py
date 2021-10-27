@@ -1,5 +1,5 @@
 from flask import Flask, request, make_response, jsonify, Response, Blueprint
-from db import db_users
+from ..db import db_users
 import bcrypt 
 
 users = Blueprint('/api/users', __name__)

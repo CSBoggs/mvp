@@ -1,4 +1,6 @@
-from mariadb import mariadb, connect
+import mariadb
+from mariadb import connect
+from flask import jsonify
 import dbcreds
 
 conn = None
@@ -28,7 +30,7 @@ def get(command, arguments =[]):
         print("Something is wrong with the connection")
     except Exception as err:
         print(err)
-    finally:
+    else:
         if (cursor != None):
             cursor.close()
         if (conn != None):
@@ -44,7 +46,7 @@ def put(command, arguments =[]):
         print("Something is wrong with the connection")
     except Exception as err:
         print(err)
-    finally:
+    else:
         if (cursor != None):
             cursor.close()
         if (conn != None):

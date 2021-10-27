@@ -1,5 +1,4 @@
 from flask import Flask
-
 from api.routes.users import users
 from api.routes.login import login
 
@@ -11,4 +10,4 @@ app.register_blueprint(login)
 app.debug = True
 
 if __name__ == "__main__":
-    app.run
+    app.run()
