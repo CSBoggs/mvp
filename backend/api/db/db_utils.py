@@ -35,6 +35,7 @@ def get(command, arguments =[]):
             cursor.close()
         if (conn != None):
             conn.close()
+    return result
 
 def put(command, arguments =[]):
     try:

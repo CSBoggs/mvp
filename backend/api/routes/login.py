@@ -1,7 +1,7 @@
 from flask import Blueprint, jsonify, make_response, Response, request
-from ..security.security_utils import generate_token
 from ..db import db_sessions, db_users
 import bcrypt
+from uuid import uuid4
 
 login = Blueprint("/api/login", __name__)
 
@@ -9,18 +9,16 @@ login = Blueprint("/api/login", __name__)
 def user_login():
     try:
         data = request.get_json()
-        print(data)
         username = data["username"]
         userId = db_users.get_user_by_username(username)
-        print(userId)
         provided_pword = data["password"].encode()
-        stored_pword = db_users.get_user_password(userId)
-
-        if bcrypt.checkpw(provided_pword.encode(), stored_pword):
-            db_sessions.login_user(username)
-            # token = generate_token(user)
-            # user[0].update({'loginToken': token})
-            # print(token)
+        hashed = bcrypt.hashpw(db_users.get_user_password(userId[0]["id"]).encode(), bcrypt.gensalt())
+        
+        if bcrypt.checkpw(provided_pword, hashed):
+            db_sessions.login_user(userId[0]["id"])
+            token = uuid4()
+            db_sessions.update_login_token(str(token), userId[0]["id"])
+            print(token)
             return make_response(jsonify(username), 200)
         else:
             return make_response(jsonify({"message": "Username and/or password do not match"}), 409)

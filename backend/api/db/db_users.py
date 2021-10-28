@@ -27,7 +27,6 @@ def edit_user(user_id, data):
 
 def get_user_password(user_id):
     result = get("SELECT password FROM users WHERE id = (?)", [user_id])
-    print(result)
     password = result[0]["password"]
     return password
 
