@@ -18,7 +18,6 @@ def user_login():
             db_sessions.login_user(userId[0]["id"])
             token = uuid4()
             db_sessions.update_login_token(str(token), userId[0]["id"])
-            print(token)
             return make_response(jsonify(username), 200)
         else:
             return make_response(jsonify({"message": "Username and/or password do not match"}), 409)
