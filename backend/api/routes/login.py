@@ -1,4 +1,5 @@
 from flask import Blueprint, jsonify, make_response, Response, request
+from flask_api import status
 from ..db import db_sessions, db_users
 import bcrypt
 from uuid import uuid4
@@ -18,9 +19,9 @@ def user_login():
             db_sessions.login_user(userId[0]["id"])
             token = uuid4()
             db_sessions.update_login_token(str(token), userId[0]["id"])
-            return make_response(jsonify(username), 200)
+            return make_response(jsonify(username), status.HTTP_200_OK)
         else:
-            return make_response(jsonify({"message": "Username and/or password do not match"}), 409)
+            return make_response(jsonify({"message": "Username and/or password do not match"}), 403)
     except Exception as err:
         print(err)
         return make_response(jsonify({"message": "Incorrect data provided"}), 400)
@@ -35,7 +36,7 @@ def user_logout():
         stored_token = db_sessions.fetch_login_token(user[0]["users_id"])
         if str(provided_token) == str(stored_token):
             db_sessions.logout_user(user[0]["id"])
-            return make_response(jsonify(user),200)
+            return make_response(jsonify(user), status.HTTP_200_OK)
     except Exception as err:
         print (err)
         return make_response(jsonify({"message": "Invalid token"}), 400)
